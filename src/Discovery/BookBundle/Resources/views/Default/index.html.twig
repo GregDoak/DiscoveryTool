@@ -1,0 +1,41 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xs-12">
+            <a href="book/create" class="btn btn-primary"><i class="fa fa-plus"></i> Add New Book</a>
+            <table class="table table-bordered table-responsive table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>ISBN</th>
+                    <th>Unique IDs</th>
+                    <th>Created On</th>
+                    <th>Updated On</th>
+                    <th>Attempt Count</th>
+                    <th>Processed</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for book in books %}
+                    <tr>
+                        <td>{{ book.isbn }}</td>
+                        <td>{% if book.googleUid != null %}
+                                <div>Google UID: {{ book.googleUid }}</div>{% endif %}</td>
+                        <td>{{ book.createdOn|date("Y-m-d H:i:s") }}</td>
+                        <td>{% if book.updatedOn == null %}{% else %}{{ book.updatedOn|date("Y-m-d H:i:s") }}{% endif %}</td>
+                        <td>{{ book.attemptCount }}</td>
+                        <td>{% if book.processed == null %}No{% else %}Yes{% endif %}</td>
+                        <td>
+                            <a href="book/update/{{ book.isbn }}" class="btn btn-warning"><i class="fa fa-edit"></i>
+                                Edit</a>
+                            <a href="book/delete/{{ book.isbn }}" class="btn btn-danger"><i class="fa fa-remove"></i>
+                                Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xs-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Admin Menu</h3>
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item"><a href="/admin/users"><i class="fa fa-users"></i> Users</a></li>
+                    <li class="list-group-item"><a href="/admin/books"><i class="fa fa-book"></i></i> Books</a></li>
+                    <li class="list-group-item"><a href="/admin/ebooks"><i class="fa fa-tablet"></i> eBooks</a></li>
+                    <li class="list-group-item"><a href="/admin/dvds"><i class="fa fa-video-camera"></i> DVDs</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-xs-8">
+
+        </div>
+    </div>
+{% endblock %}

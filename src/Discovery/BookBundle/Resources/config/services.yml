@@ -1,0 +1,4 @@
+services:
+#    discovery_book.example:
+#        class: Discovery\BookBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]

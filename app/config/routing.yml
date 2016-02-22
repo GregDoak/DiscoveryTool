@@ -1,0 +1,37 @@
+discovery_account:
+    resource: "@DiscoveryAccountBundle/Controller/"
+    type:     annotation
+    prefix:   /my-account
+
+discovery_search:
+    resource: "@DiscoverySearchBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+discovery_admin:
+    resource: "@DiscoveryAdminBundle/Controller/"
+    type:     annotation
+    prefix:   /admin
+
+discovery_user:
+    resource: "@DiscoveryUserBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+discovery_dvd:
+    resource: "@DiscoveryDVDBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+discovery_ebook:
+    resource: "@DiscoveryeBookBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+discovery_book:
+    resource: "@DiscoveryBookBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"

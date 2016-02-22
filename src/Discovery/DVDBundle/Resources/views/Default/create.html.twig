@@ -1,0 +1,59 @@
+{% extends '::base.html.twig' %}
+
+{% form_theme form _self %}
+
+{% block form_errors %}
+    {% spaceless %}
+        {% if errors|length > 0 %}
+            <p class="help-block">
+                {% for error in errors %}
+                    {{ error.message }}
+                {% endfor %}
+            </p>
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_errors %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xs-12">
+            <h3>Add a new DVD</h3>
+            <div>
+                {{ form_errors(form) }}
+                {{ form_start(form) }}
+                <div class="form-group">
+                    {{ form_label(form.imdbId, 'IMDB ID: ') }}
+                    {{ form_widget(form.imdbId, {
+                        'attr': {
+                            'class': 'form-control',
+                            'placeholder': 'Please enter the IMDB ID'
+                        }
+                    }) }}
+                    {{ form_errors(form.imdbId) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.opacURL, 'OPAC URL: ') }}
+                    {{ form_widget(form.opacURL, {
+                        'attr': {
+                            'class': 'form-control',
+                            'placeholder': 'Please enter the permanant link for this item in the OPAC'
+                        }
+                    }) }}
+                    {{ form_errors(form.opacURL) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_widget(form.submit, {
+                        'label': 'Create',
+                        'attr': {
+                            'class': 'btn btn-primary'
+                        }
+                    }) }}
+                    <a href="/admin/dvds" class="btn btn-default">Cancel</a>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

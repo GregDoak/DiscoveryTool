@@ -1,0 +1,71 @@
+{% extends '::base.html.twig' %}
+
+{% form_theme form _self %}
+
+{% block form_errors %}
+    {% spaceless %}
+        {% if errors|length > 0 %}
+            <p class="help-block">
+                {% for error in errors %}
+                    {{ error.message }}
+                {% endfor %}
+            </p>
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_errors %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xs-12">
+            <h3>Add a new Book</h3>
+            <div>
+                {{ form_errors(form) }}
+                {{ form_start(form) }}
+                <div class="form-group">
+                    {{ form_label(form.isbn, 'ISBN: ') }}
+                    {{ form_widget(form.isbn, {
+                        'attr': {
+                            'class': 'form-control',
+                            'placeholder': 'Please enter the ISBN'
+                        }
+                    }) }}
+                    {{ form_errors(form.isbn) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.googleUid, 'Google Unique ID: ') }}
+                    {{ form_widget(form.googleUid, {
+                        'attr': {
+                            'class': 'form-control'
+                        }
+                    }) }}
+                    <p class="help-block">Entering the unique ID will force the indexing service to search by the google
+                        ID over the ISBN.</p>
+                    {{ form_errors(form.googleUid) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.opacURL, 'OPAC URL: ') }}
+                    {{ form_widget(form.opacURL, {
+                        'attr': {
+                            'class': 'form-control',
+                            'placeholder': 'Please enter the permanant link for this item in the OPAC'
+                        }
+                    }) }}
+                    {{ form_errors(form.opacURL) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_widget(form.submit, {
+                        'label': 'Create',
+                        'attr': {
+                            'class': 'btn btn-primary'
+                        }
+                    }) }}
+                    <a href="/admin/books" class="btn btn-default">Cancel</a>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

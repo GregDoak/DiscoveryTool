@@ -1,0 +1,43 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xs-12">
+            <a href="ebook/create" class="btn btn-primary"><i class="fa fa-plus"></i> Add New eBook</a>
+            <table class="table table-bordered table-responsive table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>ISBN</th>
+                    <th>Unique IDs</th>
+                    <th>Created On</th>
+                    <th>Updated On</th>
+                    <th>Attempt Count</th>
+                    <th>Processed</th>
+                    <th>URL</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for ebook in ebooks %}
+                    <tr>
+                        <td>{{ ebook.isbn }}</td>
+                        <td>{% if ebook.googleUid != null %}
+                                <div>Google UID: {{ ebook.googleUid }}</div>{% endif %}</td>
+                        <td>{{ ebook.createdOn|date("Y-m-d H:i:s") }}</td>
+                        <td>{% if ebook.updatedOn == null %}{% else %}{{ ebook.updatedOn|date("Y-m-d H:i:s") }}{% endif %}</td>
+                        <td>{{ ebook.attemptCount }}</td>
+                        <td>{% if ebook.processed == null %}No{% else %}Yes{% endif %}</td>
+                        <td><a href="{{ ebook.url }}">{{ ebook.url }}</a></td>
+                        <td>
+                            <a href="ebook/update/{{ ebook.isbn }}" class="btn btn-warning"><i class="fa fa-edit"></i>
+                                Edit</a>
+                            <a href="ebook/delete/{{ ebook.isbn }}" class="btn btn-danger"><i class="fa fa-remove"></i>
+                                Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

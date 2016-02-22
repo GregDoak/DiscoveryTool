@@ -1,0 +1,38 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xs-12">
+            <a href="dvd/create" class="btn btn-primary"><i class="fa fa-plus"></i> Add New DVD</a>
+            <table class="table table-bordered table-responsive table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>IMDB ID</th>
+                    <th>Created On</th>
+                    <th>Updated On</th>
+                    <th>Attempt Count</th>
+                    <th>Processed</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for dvd in dvds %}
+                    <tr>
+                        <td>{{ dvd.imdbId }}</td>
+                        <td>{{ dvd.createdOn|date("Y-m-d H:i:s") }}</td>
+                        <td>{% if dvd.updatedOn == null %}{% else %}{{ dvd.updatedOn|date("Y-m-d H:i:s") }}{% endif %}</td>
+                        <td>{{ dvd.attemptCount }}</td>
+                        <td>{% if dvd.processed == null %}No{% else %}Yes{% endif %}</td>
+                        <td>
+                            <a href="dvd/update/{{ dvd.imdbId }}" class="btn btn-warning"><i class="fa fa-edit"></i>
+                                Edit</a>
+                            <a href="dvd/delete/{{ dvd.imdbId }}" class="btn btn-danger"><i class="fa fa-remove"></i>
+                                Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

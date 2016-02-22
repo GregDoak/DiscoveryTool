@@ -1,0 +1,5 @@
+{
+  "proxy": "http://10.40.1.241:8080",
+  "https-proxy": "http://10.40.1.241:8080",
+  "directory": "web/assets/vendor/"
+}

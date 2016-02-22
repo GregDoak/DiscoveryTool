@@ -1,0 +1,4 @@
+services:
+#    discovery_search.example:
+#        class: Discovery\SearchBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]

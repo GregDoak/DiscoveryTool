@@ -1,0 +1,40 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xs-4">
+            <form action="{{ path('discovery_search_page_index') }}" method="get" class="form-horizontal">
+                <div class="input-group">
+                    <input type="text" value="{{ query }}" placeholder="Search for" id="q" name="q"
+                           class="form-control">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">
+                            <i class="fa fa-search"></i>
+                            <span class="hidden-xs"> Search</span></button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-8">
+            {% if(string is defined) %}
+                <p>
+                <h3>{{ string }}</h3>
+                </p>
+                <p>
+                <h5 id="countOfResults"></h5>
+                </p>
+            {% endif %}
+
+            <div id="searchReturns"></div>
+        </div>
+        <div class="col-xs-4">
+            <div id="facetReturns"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ asset('assets/custom/js/search.js') }}"></script>
+{% endblock %}

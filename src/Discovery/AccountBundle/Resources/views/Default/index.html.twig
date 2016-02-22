@@ -1,0 +1,150 @@
+{% extends '::base.html.twig' %}
+
+{% form_theme profile _self %}
+{% form_theme password _self %}
+
+{% block form_errors %}
+    {% spaceless %}
+        {% if errors|length > 0 %}
+            <p class="help-block">
+                {% for error in errors %}
+                    {{ error.message }}
+                {% endfor %}
+            </p>
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_errors %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xs-12">
+            {% if message|length %}
+                <div class="alert alert-success" role="alert">{{ message }}</div>
+            {% endif %}
+            <ul class="nav nav-tabs">
+                <li {% if activeTab == 'profile' %}
+                    class="active"
+                        {% endif %}>
+                    <a data-toggle="tab" href="#profile">Profile</a>
+                </li>
+                <li {% if activeTab == 'password' %}
+                    class="active"
+                        {% endif %}><a data-toggle="tab" href="#password">Change Password</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="profile" class="tab-pane fade {% if activeTab == 'profile' %}in active{% endif %}">
+                    <h3>Update your profile</h3>
+                    <div>
+                        {{ form_errors(profile) }}
+                        {{ form_start(profile) }}
+                        <div class="form-group">
+                            {{ form_label(profile.firstName, 'First Name: ') }}
+                            {{ form_widget(profile.firstName, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': 'Please enter the first name'
+                                }
+                            }) }}
+                            {{ form_errors(profile.firstName) }}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(profile.lastName, 'Surname: ') }}
+                            {{ form_widget(profile.lastName, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': 'Please enter the surname'
+                                }
+                            }) }}
+                            {{ form_errors(profile.lastName) }}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(profile.username, 'Username: ') }}
+                            {{ form_widget(profile.username, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': 'Please enter the username'
+                                }
+                            }) }}
+                            {{ form_errors(profile.username) }}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(profile.email, 'eMail Address: ') }}
+                            {{ form_widget(profile.email, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': 'Please enter the eMail Address'
+                                }
+                            }) }}
+                            {{ form_errors(profile.email) }}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_widget(profile.submit, {
+                                'label': 'Update',
+                                'attr': {
+                                    'class': 'btn btn-primary'
+                                }
+                            }) }}
+                            <a href="/" class="btn btn-default">Cancel</a>
+                        </div>
+                        {{ form_end(profile) }}
+                    </div>
+                </div>
+                <div id="password" class="tab-pane fade {% if activeTab == 'password' %}in active{% endif %}">
+                    <h3>Change your password</h3>
+                    {{ form_errors(password) }}
+                    {{ form_start(password) }}
+
+                    <div class="form-group {% if password.current_password.vars.errors|length %} has-error {% endif %}">
+                        {{ form_label(password.current_password, 'Current Password: ') }}
+                        {{ form_widget(password.current_password, {
+                            'attr': {
+                                'class':'form-control',
+                                'placeholder': 'Enter your current password'
+                            }
+                        }) }}
+                        {{ form_errors(password.current_password) }}
+                    </div>
+
+                    <div class="form-group {% if password.plain_password.first.vars.errors|length %} has-error {% endif %}">
+                        {{ form_label(password.plain_password.first, 'New Password: ') }}
+                        {{ form_widget(password.plain_password.first, {
+                            'attr': {
+                                'class':'form-control',
+                                'placeholder': 'Enter your new password'
+                            }
+                        }) }}
+                        {{ form_errors(password.plain_password.first) }}
+                    </div>
+
+
+                    <div class="form-group {% if password.plain_password.first.vars.errors|length %} has-error {% endif %}">
+                        {{ form_label(password.plain_password.second, 'Repeat Password: ') }}
+                        {{ form_widget(password.plain_password.second, {
+                            'attr': {
+                                'class':'form-control',
+                                'placeholder': 'Enter your new password again'
+                            }
+                        }) }}
+                        {{ form_errors(password.plain_password.first) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_widget(password.submit, {
+                            'label': 'Update',
+                            'attr': {
+                                'class': 'btn btn-primary'
+                            }
+                        }) }}
+                        <a href="/" class="btn btn-default">Cancel</a>
+                    </div>
+                    {{ form_end(password) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
