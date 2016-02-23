@@ -17,24 +17,89 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-8">
+        <div class="col-xs-12">
             {% if(string is defined) %}
-                <p>
                 <h3>{{ string }}</h3>
-                </p>
-                <p>
-                <h5 id="countOfResults"></h5>
-                </p>
             {% endif %}
-
-            <div id="searchReturns"></div>
         </div>
-        <div class="col-xs-4">
-            <div id="facetReturns"></div>
+    </div>
+    <div class="row" ng-app="app" ng-init="q='{{ query }}'">
+        <div class="col-xs-8" ng-controller="resultsCtrl">
+            <div class="well well-sm" style="margin:5px; padding:0px; margin-bottom: 20px"
+                 ng-repeat="result in results">
+                <div class="media">
+                    <div class="media-left" ng-if="result.thumbnail" style="background-color: white;">
+                        <img class="media-object" ng-src="[[ result.thumbnail ]]" alt="Cover Image">
+                    </div>
+                    <div class="media-body" style="background-color: white;">
+                        <h3 class="media-heading" ng-if="result.title">
+                            [[ result.title[0] ]]
+                        </h3>
+                        <h5 class="media-heading" ng-if="result.subtitle">
+                            [[ result.subtitle[0] ]]
+                        </h5>
+                        <div class="row col-xs-12">
+                            <div class="col-xs-4 authors">
+                                <p ng-if="result.authors" ng-repeat="author in result.authors">
+                                    <i class="fa fa-user"></i> [[ author ]]
+                                </p>
+                            </div>
+                            <div class="col-xs-4">
+                                <p ng-if="result.publisher">
+                                    <i class="fa fa-users"></i> [[ result.publisher[0] ]]
+                                </p>
+                            </div>
+                            <div class="col-xs-4">
+                                <p ng-if="result.publishedDate">
+                                    <i class="fa fa-clock-o"></i> [[ result.publishedDate | date: 'yyyy' ]]
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row col-xs-12">
+                            <p ng-if="result.summary">
+                                [[ result.summary[0] ]]
+                            </p>
+                        </div>
+                    </div>
+                    <div class="media-bottom" style="border-top: #dcdcdc thin solid;">
+                        <p ng-if="result.opacURL">
+                            <a ng-href="[[ result.opacURL ]]">View in your library</a>
+                        </p>
+                        <p ng-if="result.webReaderURL">
+                            <a ng-href="[[ result.webReaderURL ]]">View [[ result.linkType|lowercase ]] from Google</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-4" ng-controller="facetsCtrl">
+            <div class="panel panel-default" ng-repeat="(column, facets) in columns">
+                <div class="panel-heading">
+                    [[ column ]]
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="(facet, count) in facets"
+                        ng-class="{ active: filters[column] && filters[column].indexOf(facet) !== -1 }">
+                        <a href="#" ng-click="toggleFilter(column, facet)">
+                            [[ facet ]]
+                            <span class="pull-right">
+                                <span class="badge">[[ count ]]</span>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript" src="{{ asset('assets/custom/js/search.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/vendor/angular/angular.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/custom/js/search/app.js') }}"></script>
+    <!--<script type="text/javascript" src="{{ asset('assets/custom/js/search.js') }}"></script>-->
+
+{% endblock %}
+
+{% block stylesheets %}
+    <link href="{{ asset('assets/custom/css/search/custom.css') }}" rel="stylesheet"/>
 {% endblock %}

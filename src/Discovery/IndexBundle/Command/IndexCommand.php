@@ -163,6 +163,8 @@ class IndexCommand extends ContainerAwareCommand
                     if (isset($selfLinkResponse->volumeInfo->publishedDate)) {
                         $timestamp = strtotime(
                           $selfLinkResponse->volumeInfo->publishedDate
+
+
                         );
                         $record->publishedDate = date(
                           'Y-m-d H:i:s',
