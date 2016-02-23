@@ -1,1 +1,26 @@
-Hello World!
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xs-12">
+            <table class="table table-bordered table-responsive table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Created On</th>
+                    <th>Message</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for error in errors %}
+                    <tr>
+                        <td>{{ error.id }}</td>
+                        <td>{{ error.createdOn|date("Y-m-d H:i:s") }}</td>
+                        <td>{{ error.message }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

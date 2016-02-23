@@ -26,6 +26,15 @@ class BookController extends Controller
           ->findAll();
 
         foreach ($books as $book) {
+            $errors = $this->getDoctrine()->getRepository(
+              'DiscoveryErrorBundle:Error'
+            )->findBy(
+              [
+                'baseTable' => 'BOOKS',
+                'baseTableID' => $book->getIsbn(),
+              ]
+            );
+
             $data[] = [
               'isbn' => $book->getIsbn(),
               'googleUid' => $book->getGoogleUID(),
@@ -33,6 +42,7 @@ class BookController extends Controller
               'updatedOn' => $book->getUpdatedOn(),
               'processed' => $book->getProcessed(),
               'attemptCount' => $book->getAttemptCount(),
+              'errors' => sizeof($errors),
             ];
         }
 

@@ -72,14 +72,16 @@ class ResultController extends Controller
             $facetData = [];
 
             foreach ($facetFields as $field => $facets) {
+                if (sizeof($facets) > 0) {
+                    $x = 0;
+                    do {
+                        $facetData[ucfirst(
+                          $field
+                        )][$facets[$x]] = $facets[$x + 1];
+                        $x = $x + 2;
 
-                $x = 0;
-
-                do {
-                    $facetData[ucfirst($field)][$facets[$x]] = $facets[$x + 1];
-                    $x = $x + 2;
-
-                } while ($x < (sizeof($facets) - 1));
+                    } while ($x < (sizeof($facets) - 1));
+                }
             }
 
             $results = [

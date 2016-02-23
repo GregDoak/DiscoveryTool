@@ -44,6 +44,7 @@ class IndexCommand extends ContainerAwareCommand
         switch ($index) {
             case "ALL":
                 $output->writeln("Processing ".$index." item types...");
+                $this->indexBooks($output);
                 break;
             case "BOOKS":
                 $output->writeln("Processing ".$index." item type...");
@@ -141,8 +142,6 @@ class IndexCommand extends ContainerAwareCommand
                         );
                     }
 
-                    print_r($selfLinkResponse);
-
                     $record = new \stdClass();
                     if (isset($selfLinkResponse->volumeInfo->authors)) {
                         $record->authors = $selfLinkResponse->volumeInfo->authors;
@@ -162,7 +161,13 @@ class IndexCommand extends ContainerAwareCommand
                         $record->publisher = $selfLinkResponse->volumeInfo->publisher;
                     }
                     if (isset($selfLinkResponse->volumeInfo->publishedDate)) {
-                        $record->publishedDate = $selfLinkResponse->volumeInfo->publishedDate;
+                        $timestamp = strtotime(
+                          $selfLinkResponse->volumeInfo->publishedDate
+                        );
+                        $record->publishedDate = date(
+                          'Y-m-d H:i:s',
+                          $timestamp
+                        );
                     }
                     if (isset($selfLinkResponse->volumeInfo->subtitle)) {
                         $record->subtitle = $selfLinkResponse->volumeInfo->subtitle;
@@ -188,34 +193,44 @@ class IndexCommand extends ContainerAwareCommand
 
                     $url = "http://".$host.":".$port."/solr/".$instance."/update?overwrite=true&wt=json&commitWithin=1000";
 
-                    echo $url;
-                    print_r(json_encode($record));
 
-                    //open a new curl handler to send the data to Solr
-                    $ch = curl_init($url);
-                    //set the data as POST
-                    curl_setopt($ch, CURLOPT_POST, 1);
-                    //set the POST data type to be XML
+                    $curl = curl_init($url);
+                    curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($curl, CURLOPT_POST, 1);
                     curl_setopt(
-                      $ch,
+                      $curl,
                       CURLOPT_HTTPHEADER,
-                      array('Content-Type: application/json')
+                      array(
+                        'Content-Type: application/json',
+                        'Accept: application/json',
+                      )
                     );
-                    //assign the XML document created above to the POST value
                     curl_setopt(
-                      $ch,
+                      $curl,
                       CURLOPT_POSTFIELDS,
-                      [json_encode($record)]
+                      json_encode([$record])
                     );
-                    //execute and get response from Solr
-                    $response = curl_exec($ch);
-                    //close connection as not needed
-                    curl_close($ch);
+                    $response = json_decode(curl_exec($curl));
 
-                    print_r($response);
+                    if (!(isset($response->responseHeader)) || ($response->responseHeader->status != 0)) {
+                        print_r($response);
+                        throw new \Exception(
+                          "Unable to save record into Solr",
+                          500
+                        );
+                    }
 
                     $processed->indexed++;
 
+                    $em = $doctrine->getEntityManager();
+                    $book->setGoogleUID($record->googleUID);
+                    $book->setAttemptCount($book->getAttemptCount() + 1);
+                    $book->setUpdatedOn(new \DateTime());
+                    $book->setProcessed(1);
+
+                    $em->persist($book);
+                    $em->flush();
 
                 } catch (\Exception $exception) {
                     $em = $doctrine->getEntityManager();
@@ -227,38 +242,14 @@ class IndexCommand extends ContainerAwareCommand
                     $error->setMessage($exception->getMessage());
                     $error->setCreatedOnValue();
 
+                    $book->setAttemptCount($book->getAttemptCount() + 1);
+
                     $em->persist($error);
+                    $em->persist($book);
                     $em->flush();
 
                     $processed->failed++;
                 }
-
-
-                /*                if (!(empty($book->getGoogleUID()))) {
-                                    //try get info using id
-                                    $processed->indexed++;
-                                } else {
-                                    $curl = curl_init($this->googleSearchUrl.$book->getIsbn());
-                                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-                                    $response = curl_exec($curl);
-
-                                    $results = json_decode($response);
-
-                                    $em = $doctrine->getEntityManager();
-                                    $now = new \DateTime();
-                                    $book->setUpdatedOn($now);
-                                    $book->setAttemptCount($book->getAttemptCount()+1);
-                                    $book->setProcessed(1);
-
-                                    $em->persist($book);
-                                    $em->flush();
-                                    $processed->indexed++;
-
-                                    $output->writeln('Processed: '.$processed->count.'/'.$processed->total);
-                                    if ($processed->count < $processed->total) {
-                                        sleep(2);
-                                    }
-                                }*/
             }
             $output->writeln('');
             $output->writeln("Indexed: ".$processed->indexed);

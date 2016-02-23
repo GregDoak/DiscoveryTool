@@ -36,8 +36,22 @@ function loadMoreResults() {
             }
             if (data.count > 0) {
                 $('#countOfResults').text(data.count + ' ' + plural('result', data.count, 's') + ' found.');
-                for (var index in data.data) {
-                    var searchReturns = '<div><h1>' + data.data[index].title + '</h1></div>';
+                for (var doc in data.data) {
+                    var document = data.data[doc];
+                    var searchReturns = '<div class="well well-sm" style="margin:5px; padding:0px;">' +
+                        '<div class="media"> ' +
+                        '<div class="media-left"> ' +
+                        '<a href="#"> ' +
+                        '<img class="media-object" src="' + document.thumbnail + '" alt="..."> ' +
+                        '</a> ' +
+                        '</div> ' +
+                        '<div class="media-body"> ' +
+                        '<h3 class="media-heading">' + document.title + '</h3>' +
+                        '<h5 class="media-heading">' + document.subtitle + '</h5>' +
+                        document.summary +
+                        '</div> ' +
+                        '</div>' +
+                        ' </div>';
                     $('#searchReturns').append(searchReturns);
                 }
             } else {

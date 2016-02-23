@@ -1,3 +1,8 @@
+discovery_error:
+    resource: "@DiscoveryErrorBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 discovery_account:
     resource: "@DiscoveryAccountBundle/Controller/"
     type:     annotation

@@ -18,7 +18,13 @@ class BookCreateType extends AbstractType
         $builder
           ->add('isbn')
           ->add('googleUid')
-          ->add('opacURL', 'Symfony\Component\Form\Extension\Core\Type\UrlType')
+          ->add(
+            'opacURL',
+            'Symfony\Component\Form\Extension\Core\Type\UrlType',
+            [
+              'required' => false,
+            ]
+          )
           ->add(
             'submit',
             'Symfony\Component\Form\Extension\Core\Type\SubmitType'

@@ -31,6 +31,10 @@
                                 Edit</a>
                             <a href="book/delete/{{ book.isbn }}" class="btn btn-danger"><i class="fa fa-remove"></i>
                                 Delete</a>
+                            {% if book.errors > 0 %}
+                                <a href="errors/BOOKS/{{ book.isbn }}" class="btn btn-primary">
+                                    View {{ book.errors }} Errors</a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
