@@ -16,7 +16,13 @@ class DVDCreateType extends AbstractType
     {
         $builder
           ->add('imdbId')
-          ->add('opacURL', 'Symfony\Component\Form\Extension\Core\Type\UrlType')
+          ->add(
+            'opacURL',
+            'Symfony\Component\Form\Extension\Core\Type\UrlType',
+            [
+              'required' => false,
+            ]
+          )
           ->add(
             'submit',
             'Symfony\Component\Form\Extension\Core\Type\SubmitType'

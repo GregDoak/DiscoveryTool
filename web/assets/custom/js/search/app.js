@@ -4,23 +4,37 @@ var app = angular.module('app', [],
         $interpolateProvider.endSymbol(']]');
     });
 
+app.filter('escape', function () {
+    return window.encodeURIComponent;
+});
+
 
 app.controller('resultsCtrl', ['$http', '$rootScope', '$scope', function ($http, $rootScope, $scope) {
 
     $scope.results = [];
+
+    var getMoreResults = true;
 
     var request = {
         method: 'GET',
         url: 'results.json',
         params: {
             start: 0,
-            limit: 100,
+            limit: 25,
             q: $scope.q,
             facet: true
         }
     };
 
     getResults(request);
+
+    $(window).scroll(function () {
+        if (getMoreResults) {
+            if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+                getResults(request);
+            }
+        }
+    });
 
     $scope.$on('filters', function (event, filters) {
         delete request.params.facet;
@@ -32,12 +46,18 @@ app.controller('resultsCtrl', ['$http', '$rootScope', '$scope', function ($http,
     function getResults(request) {
         $http(request).then(function (response) {
             var data = response.data;
-            if (data.status) {
-                $scope.results = data.data;
+            if (data.count > 0) {
+                if (request.params.start === 0) {
+                    $scope.results = data.data;
+                } else {
+                    $scope.results = $scope.results.concat(data.data);
+                }
                 request.params.start = request.params.start + request.params.limit;
                 if (request.params.facet) {
                     $rootScope.$broadcast('columns', data.facets);
                 }
+            } else {
+                getMoreResults = false;
             }
         }, function (response) {
             console.debug(response);

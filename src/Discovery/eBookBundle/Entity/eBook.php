@@ -224,4 +224,18 @@ class eBook
     {
         $this->attemptCount = 0;
     }
+
+    public function getLinkTypeText()
+    {
+        switch ($this->linkType) {
+            case 0:
+                $text = "FULL";
+                break;
+            case 1:
+                $text = "SAMPLE";
+                break;
+        }
+
+        return $text;
+    }
 }

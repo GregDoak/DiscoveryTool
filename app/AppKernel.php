@@ -26,6 +26,7 @@ class AppKernel extends Kernel
           new Discovery\DVDBundle\DiscoveryDVDBundle(),
           new Discovery\IndexBundle\DiscoveryIndexBundle(),
           new Discovery\ErrorBundle\DiscoveryErrorBundle(),
+          new Discovery\ThumbnailBundle\DiscoveryThumbnailBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

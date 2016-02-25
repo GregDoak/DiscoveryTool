@@ -15,7 +15,13 @@ class DVDUpdateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-          ->add('opacURL', 'Symfony\Component\Form\Extension\Core\Type\UrlType')
+          ->add(
+            'opacURL',
+            'Symfony\Component\Form\Extension\Core\Type\UrlType',
+            [
+              'required' => false,
+            ]
+          )
           ->add('processed')
           ->add(
             'submit',

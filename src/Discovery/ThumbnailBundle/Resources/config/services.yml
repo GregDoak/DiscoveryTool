@@ -1,0 +1,4 @@
+services:
+#    discovery_thumbnail.example:
+#        class: Discovery\ThumbnailBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]

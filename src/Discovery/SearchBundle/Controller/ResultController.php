@@ -52,7 +52,41 @@ class ResultController extends Controller
                 }
             }
 
-            $queryString = "title:".$q;
+            $fields = [
+              'authors' => [
+
+              ],
+              'categories' => [
+
+              ],
+              'collections' => [
+
+              ],
+              'publisher' => [
+
+              ],
+              'summary' => [
+
+              ],
+              'title' => [
+                'weight' => 2,
+              ],
+              'subtitle' => [
+
+              ],
+            ];
+
+            $queryString = "(";
+            foreach ($fields as $field => $options) {
+                $queryString .= $field.":*".$q."*";
+                if (isset($options['weight'])) {
+                    $queryString .= "^".$options['weight'];
+                }
+                $queryString .= " OR ";
+            }
+            $queryString = substr($queryString, 0, -3);
+            $queryString .= ")";
+
             foreach ($filters as $field => $facets) {
                 $queryString .= " AND (";
                 foreach ($facets as $facet) {
@@ -72,7 +106,7 @@ class ResultController extends Controller
             $url .= "&wt=json";
             $url .= "&hl=true&hl.fl=title&hl.simple.pre=%3Cem%3E&hl.simple.post=%3C%2Fem%3E";
             if ($facet) {
-                $url .= "&facet=true&facet.field=collections&facet.field=categories&facet.field=linkType";
+                $url .= "&facet=true&facet.field=collections&facet.field=categories&facet.field=linkType&facet.mincount=1&facet.limit=10";
             }
             $url .= "&q=".urlencode($queryString);
             $url .= "&start=".$start;

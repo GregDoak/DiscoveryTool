@@ -1,3 +1,8 @@
+discovery_thumbnail:
+    resource: "@DiscoveryThumbnailBundle/Controller/"
+    type:     annotation
+    prefix:   /thumbnail
+
 discovery_error:
     resource: "@DiscoveryErrorBundle/Controller/"
     type:     annotation

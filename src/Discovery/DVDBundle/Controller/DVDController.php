@@ -26,12 +26,22 @@ class DVDController extends Controller
           ->findAll();
 
         foreach ($dvds as $dvd) {
+            $errors = $this->getDoctrine()->getRepository(
+              'DiscoveryErrorBundle:Error'
+            )->findBy(
+              [
+                'baseTable' => 'DVDS',
+                'baseTableID' => $dvd->getImdbId(),
+              ]
+            );
+
             $data[] = [
               'imdbId' => $dvd->getImdbId(),
               'createdOn' => $dvd->getCreatedOn(),
               'updatedOn' => $dvd->getUpdatedOn(),
               'processed' => $dvd->getProcessed(),
               'attemptCount' => $dvd->getAttemptCount(),
+              'errors' => sizeof($errors),
             ];
         }
 
@@ -100,6 +110,8 @@ class DVDController extends Controller
             $form->handleRequest($request);
 
             if ($form->isValid()) {
+                $dvd->setProcessedValue();
+                $dvd->setAttemptCountValue();
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($dvd);
                 $em->flush();

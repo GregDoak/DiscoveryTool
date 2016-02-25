@@ -26,6 +26,15 @@ class eBookController extends Controller
           ->findAll();
 
         foreach ($ebooks as $ebook) {
+            $errors = $this->getDoctrine()->getRepository(
+              'DiscoveryErrorBundle:Error'
+            )->findBy(
+              [
+                'baseTable' => 'EBOOKS',
+                'baseTableID' => $ebook->getIsbn(),
+              ]
+            );
+
             $data[] = [
               'isbn' => $ebook->getIsbn(),
               'googleUid' => $ebook->getGoogleUID(),
@@ -35,6 +44,7 @@ class eBookController extends Controller
               'attemptCount' => $ebook->getAttemptCount(),
               'url' => $ebook->getUrl(),
               'linkType' => $ebook->getLinkType(),
+              'errors' => sizeof($errors),
             ];
         }
 
@@ -103,6 +113,8 @@ class eBookController extends Controller
             $form->handleRequest($request);
 
             if ($form->isValid()) {
+                $ebook->setProcessedValue();
+                $ebook->setAttemptCountValue();
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($ebook);
                 $em->flush();

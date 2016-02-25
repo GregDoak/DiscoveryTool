@@ -33,6 +33,10 @@
                                 Edit</a>
                             <a href="ebook/delete/{{ ebook.isbn }}" class="btn btn-danger"><i class="fa fa-remove"></i>
                                 Delete</a>
+                            {% if ebook.errors > 0 %}
+                                <a href="errors/EBOOKS/{{ ebook.isbn }}" class="btn btn-primary">
+                                    View {{ ebook.errors }} Errors</a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

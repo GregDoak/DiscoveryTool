@@ -28,6 +28,10 @@
                                 Edit</a>
                             <a href="dvd/delete/{{ dvd.imdbId }}" class="btn btn-danger"><i class="fa fa-remove"></i>
                                 Delete</a>
+                            {% if dvd.errors > 0 %}
+                                <a href="errors/DVDS/{{ dvd.imdbId }}" class="btn btn-primary">
+                                    View {{ dvd.errors }} Errors</a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

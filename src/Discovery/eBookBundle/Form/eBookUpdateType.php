@@ -16,15 +16,22 @@ class eBookUpdateType extends AbstractType
     {
         $builder
           ->add('googleUID')
-          ->add('opacURL', 'Symfony\Component\Form\Extension\Core\Type\UrlType')
+          ->add(
+            'opacURL',
+            'Symfony\Component\Form\Extension\Core\Type\UrlType',
+            [
+              'required' => false,
+            ]
+          )
           ->add('processed')
           ->add('url', 'Symfony\Component\Form\Extension\Core\Type\UrlType')
           ->add(
             'linkType',
             'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
             [
-              'choices' => ['FULL', 'SAMPLE', null],
+              'choices' => ['FULL', 'SAMPLE'],
               'empty_data' => null,
+              'required' => false,
             ]
           )
           ->add(
