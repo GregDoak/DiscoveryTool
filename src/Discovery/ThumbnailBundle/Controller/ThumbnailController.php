@@ -28,10 +28,10 @@ class ThumbnailController extends Controller
         curl_close($ch);
 
         header('Content-type: image/jpeg');
-        $test = \imagecreatefromstring($data);
+        $image = \imagecreatefromstring($data);
 
 
-        imagejpeg($test, null, 100);
+        imagejpeg($image, null, 100);
 
         return new Response();
     }
