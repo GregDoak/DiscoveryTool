@@ -56,9 +56,15 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="row col-xs-12">
+                        <div class="row col-xs-12" ng-init="result.summaryLimit = 400">
                             <p ng-if="result.summary" style="text-align:justify;text-justify:auto;">
-                                [[ result.summary[0] ]]
+                                [[ result.summary[0]| limitTo : result.summaryLimit ]]
+                            <div ng-show="result.summary[0].length > result.summaryLimit">
+                                <a ng-click="result.summaryLimit = result.summary[0].length">Show more...</a>
+                            </div>
+                            <div ng-show="result.summaryLimit > 400">
+                                <a ng-click="result.summaryLimit = 400">Show less...</a>
+                            </div>
                             </p>
                         </div>
                     </div>
