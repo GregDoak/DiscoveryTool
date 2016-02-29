@@ -14,10 +14,14 @@ Build the database
 ```sh
 $ php app/console doctrine:schema:update --force
 ```
-Load the default user
+Load the default user 
 ```sh
 $ php app/console doctrine:fixtures:load
 ```
+
+### Default User Credentials
+**Username:** admin
+**Password:** admin
 
 ### Dependencies
 
