@@ -19,7 +19,7 @@ app.controller('resultsCtrl', ['$http', '$rootScope', '$scope', function ($http,
         method: 'GET',
         url: 'results.json',
         params: {
-            start: 0,
+            start: -25,
             limit: 25,
             q: $scope.q,
             facet: true
@@ -44,6 +44,7 @@ app.controller('resultsCtrl', ['$http', '$rootScope', '$scope', function ($http,
     });
 
     function getResults(request) {
+        request.params.start = request.params.start + request.params.limit;
         $http(request).then(function (response) {
             var data = response.data;
             if (data.count > 0) {
@@ -52,7 +53,6 @@ app.controller('resultsCtrl', ['$http', '$rootScope', '$scope', function ($http,
                 } else {
                     $scope.results = $scope.results.concat(data.data);
                 }
-                request.params.start = request.params.start + request.params.limit;
                 if (request.params.facet) {
                     $rootScope.$broadcast('columns', data.facets);
                 }
