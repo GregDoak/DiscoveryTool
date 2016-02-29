@@ -62,6 +62,9 @@ class ResultController extends Controller
               'collections' => [
 
               ],
+              'id' => [
+
+              ],
               'publisher' => [
 
               ],
