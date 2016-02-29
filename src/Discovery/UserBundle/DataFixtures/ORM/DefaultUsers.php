@@ -1,6 +1,6 @@
 <?php
 
-namespace Helios\InVue\UserBundle\DataFixtures\ORM;
+namespace Discovery\UserBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
