@@ -154,6 +154,32 @@ class DVDController extends Controller
                 $em->remove($dvd);
                 $em->flush();
 
+                $json = new \stdClass();
+                $json->delete = new \stdClass();
+                $json->delete->id = "DVD: ".$id;
+                $json->commit = new \stdClass();
+
+                $url = "http://".$this->getParameter(
+                    'solr_host'
+                  ).":".$this->getParameter(
+                    'solr_port'
+                  )."/solr/".$this->getParameter('solr_instance')."/update";
+
+                $curl = curl_init($url);
+                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($curl, CURLOPT_POST, 1);
+                curl_setopt(
+                  $curl,
+                  CURLOPT_HTTPHEADER,
+                  [
+                    'Content-Type: application/json',
+                    'Accept: application/json',
+                  ]
+                );
+                curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($json));
+                $response = curl_exec($curl);
+
                 return $this->redirect('/admin/dvds');
             }
         }
