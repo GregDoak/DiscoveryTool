@@ -19,7 +19,7 @@ app.controller('resultsCtrl', ['$http', '$rootScope', '$scope', function ($http,
         method: 'GET',
         url: 'results.json',
         params: {
-            start: 0,
+            start: -25,
             limit: 25,
             q: $scope.q,
             facet: true
@@ -39,13 +39,13 @@ app.controller('resultsCtrl', ['$http', '$rootScope', '$scope', function ($http,
     $scope.$on('filters', function (event, filters) {
         //delete request.params.facet;
         request.params.filters = filters;
-        request.params.start = 0;
+        request.params.start = -25;
         getResults(request);
     });
 
     function getResults(request) {
+        request.params.start = request.params.start + request.params.limit;
         $http(request).then(function (response) {
-            request.params.start = request.params.start + request.params.limit;
             var data = response.data;
             if (data.count > 0) {
                 if (request.params.start === 0) {
