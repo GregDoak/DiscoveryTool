@@ -19,7 +19,7 @@ app.controller('resultsCtrl', ['$http', '$rootScope', '$scope', function ($http,
         method: 'GET',
         url: 'results.json',
         params: {
-            start: -25,
+            start: 0,
             limit: 25,
             q: $scope.q,
             facet: true
@@ -44,8 +44,8 @@ app.controller('resultsCtrl', ['$http', '$rootScope', '$scope', function ($http,
     });
 
     function getResults(request) {
-        request.params.start = request.params.start + request.params.limit;
         $http(request).then(function (response) {
+            request.params.start = request.params.start + request.params.limit;
             var data = response.data;
             if (data.count > 0) {
                 if (request.params.start === 0) {
