@@ -37,7 +37,7 @@ app.controller('resultsCtrl', ['$http', '$rootScope', '$scope', function ($http,
     });
 
     $scope.$on('filters', function (event, filters) {
-        //delete request.params.facet;
+        delete request.params.facet;
         request.params.filters = filters;
         request.params.start = -25;
         getResults(request);

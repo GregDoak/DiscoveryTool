@@ -2,21 +2,6 @@
 
 {% block body %}
     <div class="row">
-        <div class="col-xs-4">
-            <form action="{{ path('discovery_search_page_index') }}" method="get" class="form-horizontal">
-                <div class="input-group">
-                    <input type="text" value="{{ query }}" placeholder="Search for" id="q" name="q"
-                           class="form-control">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit">
-                            <i class="fa fa-search"></i>
-                            <span class="hidden-xs"> Search</span></button>
-                    </span>
-                </div>
-            </form>
-        </div>
-    </div>
-    <div class="row">
         <div class="col-xs-12">
             {% if(string is defined) %}
                 <h3>{{ string }}</h3>
@@ -24,78 +9,142 @@
         </div>
     </div>
     <div class="row" ng-app="app" ng-init="q='{{ query }}'">
-        <div class="col-xs-8" ng-controller="resultsCtrl">
-            <div class="well well-sm" style="margin:5px; padding:0px; margin-bottom: 20px"
-                 ng-repeat="result in results">
-                <div class="media">
-                    <div class="media-left" ng-if="result.thumbnail" style="background-color: white;">
-                        <img class="media-object" src="/thumbnail?file=[[ result.thumbnail|escape ]]" alt=""
-                             height="200px">
+        <div class="col-sm-8 col-md-8" ng-controller="resultsCtrl">
+            <div class="well hidden-md hidden-lg">
+                <form action="/" method="get" class="form-horizontal">
+                    <div class="input-group">
+                        <input type="text" value="{{ query }}" placeholder="Search for" id="q" name="q"
+                               class="form-control">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit">
+                                    <i class="fa fa-search"></i>
+                                    <span class="hidden-xs"> Search</span></button>
+                            </span>
                     </div>
-                    <div class="media-body" style="background-color: white;">
-                        <h3 class="media-heading" ng-if="result.title">
-                            [[ result.title[0] ]]
-                        </h3>
-                        <h5 class="media-heading" ng-if="result.subtitle">
-                            [[ result.subtitle[0] ]]
-                        </h5>
-                        <div class="row col-xs-12">
-                            <div class="col-xs-4 authors">
-                                <p ng-if="result.authors" ng-repeat="author in result.authors">
-                                    <i class="fa fa-user"></i> [[ author ]]
-                                </p>
+                </form>
+            </div>
+            <div class="panel-group hidden-sm hidden-md hidden-lg" id="accordian" ng-controller="facetsCtrl">
+                <div ng-repeat="(column, facets) in columns">
+                    <div class="panel panel-default">
+                        <a data-toggle="collapse" data-parent="#accordion" ng-href="#collapse[[ column ]]">
+                            <div class="panel-heading">
+                                [[ column ]]
                             </div>
-                            <div class="col-xs-4">
-                                <p ng-if="result.publisher">
-                                    <i class="fa fa-users"></i> [[ result.publisher[0] ]]
-                                </p>
-                            </div>
-                            <div class="col-xs-4">
-                                <p ng-if="result.publishedDate">
-                                    <i class="fa fa-clock-o"></i> [[ result.publishedDate | date: 'yyyy' ]]
-                                </p>
+                        </a>
+                        <div id="collapse[[ column ]]" class="panel-collapse collapse">
+                            <div class="list-group" ng-repeat="(facet, count) in facets">
+                                <a href="#"
+                                   ng-click="toggleFilter(column, facet)" class="list-group-item"
+                                   ng-class="{ active: filters[column] && filters[column].indexOf(facet) !== -1 }">
+                                    [[ facet ]]
+                                    <span class="badge">
+                                        [[ count ]]
+                                    </span>
+                                </a>
                             </div>
                         </div>
-                        <div class="row col-xs-12" ng-init="result.summaryLimit = 400">
-                            <p ng-if="result.summary" style="text-align:justify;text-justify:auto;">
-                                [[ result.summary[0]| limitTo : result.summaryLimit ]]
-                            <div ng-show="result.summary[0].length > result.summaryLimit">
-                                <a ng-click="result.summaryLimit = result.summary[0].length">Show more...</a>
-                            </div>
-                            <div ng-show="result.summaryLimit > 400">
-                                <a ng-click="result.summaryLimit = 400">Show less...</a>
-                            </div>
-                            </p>
+                    </div>
+                </div>
+            </div>
+            <div class="thumbnail" ng-repeat="result in results">
+                <div class="row">
+                    <div class="col-xs-4 col-sm-4 col-lg-4 col-md-4">
+                        <div class="thumbnail-img">
+                            <img class="media-object" src="/thumbnail?file=[[ result.thumbnail|escape ]]" alt=""
+                                 ng-if="result.thumbnail">
+                            <img class="media-object"
+                                 src="/thumbnail?file=[[ 'http://127.0.0.1/assets/custom/images/not-found.png'|escape ]]"
+                                 alt="" ng-if="!result.thumbnail">
                         </div>
                     </div>
-                    <div class="media-bottom" style="border-top: #dcdcdc thin solid;">
-                        <p ng-if="result.opacURL">
-                            <i class="fa fa-university"></i><a ng-href="[[ result.opacURL ]]">View in your library</a>
-                        </p>
-                        <p ng-if="result.webReaderURL">
-                            <i class="fa fa-book"></i><a ng-href="[[ result.webReaderURL ]]">View [[
-                                result.linkType|lowercase ]] text</a>
-                        </p>
+
+                    <div class="col-xs-8 col-sm-8 col-lg-8 col-md-8 pad-0">
+                        <div>
+                            <div class="caption">
+                                <h3 ng-if="result.title">
+                                    [[ result.title[0] ]]
+                                </h3>
+                                <h5 ng-if="result.subtitle">
+                                    [[ result.subtitle[0] ]]
+                                </h5>
+                                <div class="item-info">
+                                    <ul class="list-inline" ng-if="result.publisher || result.publishedDate">
+                                        <li ng-if="result.publisher">
+                                            <i class="fa fa-building"></i>
+                                            <span class="">[[ result.publisher[0] ]]</span>
+                                        </li>
+                                        <li ng-if="result.publishedDate">
+                                            <i class="fa fa-clock-o"></i>
+                                            <span class="">[[ result.publishedDate | date: 'yyyy' ]]</span>
+                                        </li>
+                                    </ul>
+                                    <ul class="list-inline" ng-if="result.authors">
+                                        <li>
+                                            <i class="fa fa-user"></i>
+                                            <span ng-repeat="author in result.authors">[[ author ]]<span ng-if="!$last">, </span></span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="item-desc" ng-init="result.summaryLimit = 400" ng-if="result.summary">
+                                    <p>
+                                        [[ result.summary[0]| limitTo : result.summaryLimit ]]
+                                    </p>
+                                    <div ng-show="result.summary[0].length > result.summaryLimit">
+                                        <a ng-click="result.summaryLimit = result.summary[0].length">Show more...</a>
+                                    </div>
+                                    <div ng-show="result.summaryLimit > 400">
+                                        <a ng-click="result.summaryLimit = 400">Show less...</a>
+                                    </div>
+                                </div>
+                                <ul class="item-links list-inline">
+                                    <li ng-if="result.opacURL">
+                                        <a ng-href="[[ result.opacURL ]]" class="btn btn-xs btn-info">
+                                            <i class="fa fa-university"></i> View in your library
+                                        </a>
+                                    </li>
+                                    <li ng-if="result.webReaderURL">
+                                        <a ng-href="[[ result.webReaderURL ]]" class="btn btn-xs btn-info">
+                                            <i class="fa fa-book"></i> View [[ result.linkType|lowercase ]] text
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-xs-4" ng-controller="facetsCtrl">
-            <div class="panel panel-default" ng-repeat="(column, facets) in columns">
-                <div class="panel-heading">
-                    [[ column ]]
-                </div>
-                <ul class="list-group">
-                    <li class="list-group-item" ng-repeat="(facet, count) in facets"
-                        ng-class="{ active: filters[column] && filters[column].indexOf(facet) !== -1 }">
-                        <a href="#" ng-click="toggleFilter(column, facet)">
-                            [[ facet ]]
-                            <span class="pull-right">
-                                <span class="badge">[[ count ]]</span>
+        <div class="col-sm-4 col-md-4">
+            <div class="well hidden-xs hidden-sm ">
+                <form action="/" method="get" class="form-horizontal">
+                    <div class="input-group">
+                        <input type="text" value="{{ query }}" placeholder="Search for" id="q" name="q"
+                               class="form-control">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit">
+                                    <i class="fa fa-search"></i>
+                                    <span class="hidden-xs"> Search</span>
+                                </button>
+                            </span>
+                    </div>
+                </form>
+                <!-- /.input-group -->
+            </div>
+            <div class="panel-group hidden-xs" ng-controller="facetsCtrl">
+                <div class="panel panel-default" ng-repeat="(column, facets) in columns">
+                    <div class="panel-heading">
+                        [[ column ]]
+                    </div>
+                    <div class="list-group" ng-repeat="(facet, count) in facets">
+                        <a href="#"
+                           ng-click="toggleFilter(column, facet)" class="list-group-item"
+                           ng-class="{ active: filters[column] && filters[column].indexOf(facet) !== -1 }">[[ facet ]]
+                            <span class="badge">
+                                [[ count ]]
                             </span>
                         </a>
-                    </li>
-                </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
