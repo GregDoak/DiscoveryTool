@@ -1,6 +1,10 @@
 # Discovery
 This is the code base for the discovery tool, it provides a web front end for adding, updating and deleting item types as well as an indexing agent which connects to Google adn OMDB APIs for the information which is then put into Apache Solr for searching.
 
+###  Server
+A pre-built server with all the required components is available from [here.](http://enquirer.cityofglasgowcollege.ac.uk/files/DiscoveryTool.zip)  Download and extract the zip file and follow the installation instructions contained within the README file.
+
+
 ### Installation
 Clone the respoitory into the web root
 ```sh
